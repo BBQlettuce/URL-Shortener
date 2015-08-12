@@ -12,5 +12,8 @@ class ShortenedUrl < ActiveRecord::Base
     code
   end
 
+  def self.create_for_user_and_long_url!(user, long_url)
+    ShortenedUrl.new(long_url: long_url, short_url: random_code, submitter_id: user.id)
+  end
 
 end
