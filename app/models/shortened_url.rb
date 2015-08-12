@@ -16,4 +16,8 @@ class ShortenedUrl < ActiveRecord::Base
     ShortenedUrl.new(long_url: long_url, short_url: random_code, submitter_id: user.id)
   end
 
+  belongs_to :submitter,
+    class_name: "User",
+    foreign_key: :submitter_id,
+    primary_key: :id
 end
