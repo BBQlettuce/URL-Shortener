@@ -29,4 +29,12 @@ class ShortenedUrl < ActiveRecord::Base
   has_many :visitors,
     through: :visits,
     source: :visitors
+
+  def num_clicks
+    Visit.where("url_id = #{id}").count("visitor_id")
+  end
+
+  def num_uniques
+    Visit.where("url_id = #{id}").count("DISTINCT visitor_id")
+  end
 end
