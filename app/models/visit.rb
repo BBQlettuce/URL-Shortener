@@ -1,4 +1,9 @@
 class Visit < ActiveRecord::Base
+
+  def self.record_visit!(shortened_url, user)
+    Visit.new(url_id: shortened_url.id, visitor_id: user.id).save
+  end
+
   belongs_to :visitors,
     class_name: "User",
     foreign_key: :visitor_id,
