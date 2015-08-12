@@ -31,10 +31,14 @@ class ShortenedUrl < ActiveRecord::Base
     source: :visitors
 
   def num_clicks
-    Visit.where("url_id = #{id}").count("visitor_id")
+    visits.count("visitor_id")
   end
 
   def num_uniques
-    Visit.where("url_id = #{id}").count("DISTINCT visitor_id")
+    visits.count("DISTINCT visitor_id")
+  end
+
+  def num_recent_uniques(time_ago)
+    visits.where("created_at > ?", time_ago).count("DISTINCT visitor_id")
   end
 end
