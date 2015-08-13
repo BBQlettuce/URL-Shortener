@@ -51,7 +51,9 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   # Gotta have byebug...
-  gem 'byebug'
+  #gem 'byebug'
   # pry > irb
   gem 'pry-rails'
 end
+
+gem 'launchy'

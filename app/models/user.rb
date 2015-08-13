@@ -17,4 +17,7 @@ class User < ActiveRecord::Base
     through: :visits,
     source: :visited_urls
 
+  def self.make_new_user(email)
+    User.new(email: email).save
+  end
 end

@@ -1,0 +1,69 @@
+require 'launchy'
+
+class CLI
+
+  def visit_url(user)
+    puts "Enter the URL you want to visit."
+    short_url = gets.chomp
+    to_visit = ShortenedUrl.find_by_short_url(short_url)
+    if to_visit.nil?
+      puts "No such URL exists!"
+    else
+      Visit.record_visit!(to_visit, user)
+      #Launchy.open(to_visit.long_url)
+    end
+  end
+
+  def create_and_return_url(user)
+    puts "Enter the URL you want to shorten."
+    url = gets.chomp
+    ShortenedUrl.create_for_user_and_long_url!(user, url)
+    puts ShortenedUrl.where("submitter_id = ?", user.id).last.short_url
+  end
+
+  def run
+    puts "Please enter your email:"
+    print ">>> "
+    entered_email = gets.chomp
+    current_user = find_user(entered_email)
+    loop do
+      puts "What do you want to do?"
+      puts "1. create new shortened url"
+      puts "2. visit a shortened url"
+      puts "3. quit"
+      input = gets.chomp
+      case input
+      when "1"
+        create_and_return_url(current_user)
+      when "2"
+        visit_url(current_user)
+      else
+        puts "Bye!"
+        break
+      end
+    end
+  rescue
+    puts "You do not have an account. Would you like to create one?"
+    puts "Y/N"
+    input = gets.chomp.downcase
+    if input == "y"
+      create_new_user(entered_email)
+      puts "Account created!"
+    else
+      puts "Bye!"
+    end
+  end
+
+  def find_user(email)
+    user = User.find_by_email(email)
+    raise if user.nil?
+    user
+  end
+
+  def create_new_user(email)
+    User.make_new_user(email)
+  end
+
+end
+
+CLI.new.run
